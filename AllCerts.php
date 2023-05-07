@@ -66,7 +66,7 @@ $Cert_Info = mysqli_fetch_assoc($Cert_Result);
 					    echo "<td>" . $row['Employee_ID'] . "</td>";
 					    echo "<td>" . $row['Certification'] . "</td>";
 					    echo "<td>" . $row['Certification_ID'] . "</td>";
-					    echo "<td>" . $row['First_Name']. " " . $row['Last_Name'] . "</td>";
+					    echo "<td>" . $row['Name'] . "</td>";
 					    echo "<td>" . $row['Position'] . "</td>";
 					    
 					    echo "</tr>";
