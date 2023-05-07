@@ -14,25 +14,30 @@ $empQuery = "SELECT Employee_ID, Position FROM (SELECT Employee_ID, Position FRO
           UNION
           SELECT Employee_ID, Position FROM regional_staff)s 
           WHERE Employee_ID = $currVar";
+
 $result0 = mysqli_query($conn, $empQuery);
 if($result0 AND mysqli_num_rows($result0) !== 0){
     $user_data = mysqli_fetch_assoc($result0);
     if (strcmp($user_data['Position'], "CEO") === 0 OR strcmp($user_data['Position'], "CFO") === 0){
-        $empQuery4 = "SELECT CONCAT(first_name, ' ', last_name) as 'Name', email, Position FROM (SELECT * FROM Employees e RIGHT JOIN Salary_Employees s USING (Employee_ID)
+        $empQuery1 = "SELECT Employee_ID, CONCAT(first_name, ' ', last_name) as 'Name', email, Position, Salary, hire_date FROM (SELECT * FROM Employees e RIGHT JOIN Salary_Employees s USING (Employee_ID)
                      JOIN Financial_Employees USING(Employee_ID, first_name, last_name)
                      UNION
                      SELECT * FROM Employees e RIGHT JOIN Salary_Employees s USING (Employee_ID)
                      JOIN regional_staff USING(Employee_ID, first_name, last_name)) s
                      UNION 
-                     SELECT CONCAT(e.first_name, ' ', e.last_name) as 'Name', email, Position FROM Employees e RIGHT JOIN regional_staff r USING (Employee_ID)
+                     SELECT Employee_ID, CONCAT(e.first_name, ' ', e.last_name) as 'Name', email, Position, CONCAT(h.Hour_Rate, '/hour') as Salary, hire_date FROM Employees e RIGHT JOIN regional_staff r USING (Employee_ID)
                      JOIN Hourly_Employees h USING (Employee_ID)";
-        $result4 = mysqli_query($conn, $empQuery4);
+        $showTable = true;
+        
+        $result1 = mysqli_query($conn, $empQuery1);
     }
     elseif (strcmp($user_data['Position'], "Regional Director") === 0){
         $empQuery2 = "SELECT e.Employee_ID, CONCAT(first_name, ' ', last_name) as 'Name', e.email, r.Position, IFNULL(CONCAT(Hour_Rate, '/hour'), Salary_Employees.Salary) as 'Salary', e.hire_date FROM Employees e RIGHT JOIN regional_staff r USING (Employee_ID, first_name, last_name)
                       LEFT JOIN Hourly_Employees USING (Employee_ID) 
                       LEFT JOIN Salary_Employees USING (Employee_ID)";
         $result2 = mysqli_query($conn, $empQuery2);
+        $showTable = true;
+        
     }
     else{
         $empQuery3 = "SELECT e.Employee_ID, CONCAT(first_name, ' ', last_name) as 'Name', e.email, r.Position, IFNULL(CONCAT(Hour_Rate, '/hour'), Salary_Employees.Salary) as 'Salary', e.hire_date FROM Employees e RIGHT JOIN regional_staff r USING (Employee_ID, first_name, last_name)
@@ -82,8 +87,8 @@ else{
 			<p id = "title">RICHMOND REGIONAL AIRLINE Employee Portal</p>	
 
 		</div>
-			<table id="forum" <?php if ($showTable === false){?>style="display:none"<?php } ?>width="90%" border="1" align="center"    cellpadding="2"   cellspacing="3" bgcolor="#CCCCCC">
-
+			<table id="forum" <?php if ($showTable === false){?>style="display:none"<?php } ?> width="90%" border="1" align="center"    cellpadding="2"   cellspacing="3" bgcolor="#CCCCCC">
+				<?php if(strcmp($user_data['Position'], "CEO") === 0 OR strcmp($user_data['Position'], "CFO") === 0 OR strcmp($user_data['Position'], "Regional Director") === 0 ){?> 
  				<thead>
 
   					<tr>
@@ -95,7 +100,7 @@ else{
     				<th width="13%" align="center" bgcolor="#E6E6E6"><strong>Hire Date</strong></td>
 					</tr>
 					<?php 
-					if(array_key_exists($user_data['Position'], $user_data)){
+					if($user_data['Position'] !== NULL){
 					if (strcmp($user_data['Position'], "CEO") === 0 OR strcmp($user_data['Position'], "CFO") === 0){
 					while($row = mysqli_fetch_array($result1))
 					{
@@ -142,12 +147,12 @@ else{
 					}
 					}
 					else{
-					    echo "Unknown Database Error.";
+					    echo "Nothing to show.";
 					}
 					?>
-
+				<?php }?>
     			</thead>
-    	</table>
+    	</table><br>
     	<a href="index.php">Go Back</a><br><br>
 	</body>
 </html>
