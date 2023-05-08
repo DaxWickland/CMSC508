@@ -101,7 +101,7 @@ else{
 					</tr>
 					<?php 
 					if($user_data['Position'] !== NULL){
-					if (strcmp($user_data['Position'], "CEO") === 0 OR strcmp($user_data['Position'], "CFO") === 0){
+					    if (strcmp($user_data['Position'], "CEO") === 0 OR strcmp($user_data['Position'], "CFO") === 0 OR strcmp($AdminResult['name'], "Admin") === 0){
 					while($row = mysqli_fetch_array($result1))
 					{
 					    echo "<tr>";
@@ -116,7 +116,7 @@ else{
 					}
 					echo "</table>";
 					}
-					elseif (strcmp($user_data['Position'], "Regional Director") === 0){
+					elseif (strcmp($user_data['Position'], "Regional Director") === 0 OR strcmp($AdminResult['name'], "Admin") === 0){
 					    while($row = mysqli_fetch_array($result2))
 					    {
 					        echo "<tr>";

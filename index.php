@@ -14,17 +14,19 @@ session_start();
           UNION
           SELECT Employee_ID, Position FROM regional_staff)s 
           WHERE Employee_ID = $currVar) s JOIN Employees USING (Employee_ID)";
+    $AdminQuery = "SELECT name FROM user WHERE ID = $currVar";
     $result1 = mysqli_query($conn, $query1);
+    $AdminResult = mysqli_query($conn, $AdminQuery);
     if(mysqli_num_rows($result1) !== 0){
     $user_data = mysqli_fetch_assoc($result1);
-    if (strcmp($user_data['Position'], "CEO") === 0 OR strcmp($user_data['Position'], "CFO") === 0){
+    if (strcmp($user_data['Position'], "CEO") === 0 OR strcmp($user_data['Position'], "CFO") === 0 OR strcmp($AdminResult['name'], "Admin") === 0){
         $showFinDiv = true;
     }
-    if (strcmp($user_data['Position'], "Regional Director") === 0 ){
+    if (strcmp($user_data['Position'], "Regional Director") === 0 OR strcmp($AdminResult['name'], "Admin") === 0){
         $showCertDiv = true;
     }
     
-    if (strcmp($user_data['Position'], "Pilot") === 0 OR strcmp($user_data['Position'], "Maintanence") === 0){
+    if (strcmp($user_data['Position'], "Pilot") === 0 OR strcmp($user_data['Position'], "Maintanence") === 0 OR strcmp($AdminResult['name'], "Admin") === 0){
         $showEmpCertDiv = true;
     }
     
