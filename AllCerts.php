@@ -74,7 +74,29 @@ $Cert_Info = mysqli_fetch_assoc($Cert_Result);
 					echo "</table>";
                     ?>
     			</thead>
-    	</table><br>
+    	</table><br><br>
+    	    	<form method="POST">
+        					<label>Select an Employee to edit Certifications</label>
+        						<select name="Employee_Edit_Certs">
+            			<?php
+
+            			while ($row = mysqli_fetch_array($Cert_Result)){
+            			    ?>
+            			    
+               			<option value="<?php echo $row["Certification"];
+
+                        ?>">
+                		</option>
+            			<?php
+            			}
+                        ?>
+            
+        </select>
+        <br>
+        
+        <input type="submit" value="submit" name="submit">
+    </form>
+    
                 </div>  
            </div>  
            <br />  

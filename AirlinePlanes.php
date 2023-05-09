@@ -67,8 +67,9 @@ $resultPlanes = mysqli_query($conn, $Planesview);
     	
     	
     	<form method="POST">
+        					<form method="POST">
         					<label>Edit Airplanes</label>
-        						<select name="Edit_Airplanes">
+        						<select name="Edit_Airplane">
             			<?php
 
             			while ($row = mysqli_fetch_array($resultPlanes)){
@@ -81,6 +82,12 @@ $resultPlanes = mysqli_query($conn, $Planesview);
             			<?php
             			}
                         ?>
+            
+        </select>
+        <br>
+        
+        <input type="submit" value="submit" name="submit">
+    </form>
                 </div>  
            </div>  
            <br />  
