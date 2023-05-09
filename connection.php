@@ -1,7 +1,6 @@
 <?php
 // Display all errors, very useful for PHP debugging (disable in production)
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
+
 // Parameters of the MySQL connection 
 $servername = "cmsc508.com";
 $username = "23SP_wicklandde";
