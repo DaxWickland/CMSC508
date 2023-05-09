@@ -5,8 +5,9 @@ session_start();
 include("connection.php");
 include("functions.php");
 
+$Emp = $_SESSION['user_id'];
 
-$EmpCertQuery = "SELECT Certification, Certification_ID FROM ALL_CERTS WHERE Employee_ID = 190
+$EmpCertQuery = "SELECT Certification, Certification_ID FROM ALL_CERTS WHERE Employee_ID = $Emp
 ORDER by Certification_ID";
 
 $EmpCertResult = mysqli_query($conn, $EmpCertQuery);

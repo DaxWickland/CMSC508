@@ -64,6 +64,23 @@ $resultPlanes = mysqli_query($conn, $Planesview);
                     ?>
     			</thead>
     	</table><br>
+    	
+    	
+    	<form method="POST">
+        					<label>Edit Airplanes</label>
+        						<select name="Edit_Airplanes">
+            			<?php
+
+            			while ($row = mysqli_fetch_array($resultPlanes)){
+            			    ?>
+            			    
+               			<option value="<?php echo $row["Plane_Model"];
+
+                        ?>">
+                		</option>
+            			<?php
+            			}
+                        ?>
                 </div>  
            </div>  
            <br />  

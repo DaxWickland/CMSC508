@@ -16,9 +16,9 @@ $empQuery = "SELECT Employee_ID, Position FROM (SELECT Employee_ID, Position FRO
           WHERE Employee_ID = $currVar";
 
 $result0 = mysqli_query($conn, $empQuery);
-if($result0 AND mysqli_num_rows($result0) !== 0){
+if(mysqli_num_rows($result0) !== 0){
     $user_data = mysqli_fetch_assoc($result0);
-    if (strcmp($user_data['Position'], "CEO") === 0 OR strcmp($user_data['Position'], "CFO") === 0){
+    if (strcmp($user_data['Position'], "CEO") === 0 OR strcmp($user_data['Position'], "CFO") === 0 OR strcmp($user_data['Position'], "DBTEST") === 0){
         $empQuery1 = "SELECT Employee_ID, CONCAT(first_name, ' ', last_name) as 'Name', email, Position, Salary, hire_date FROM (SELECT * FROM Employees e RIGHT JOIN Salary_Employees s USING (Employee_ID)
                      JOIN Financial_Employees USING(Employee_ID, first_name, last_name)
                      UNION
@@ -30,6 +30,7 @@ if($result0 AND mysqli_num_rows($result0) !== 0){
         $showTable = true;
         
         $result1 = mysqli_query($conn, $empQuery1);
+        $result11 = $result1;
     }
     elseif (strcmp($user_data['Position'], "Regional Director") === 0){
         $empQuery2 = "SELECT e.Employee_ID, CONCAT(first_name, ' ', last_name) as 'Name', e.email, r.Position, IFNULL(CONCAT(Hour_Rate, '/hour'), Salary_Employees.Salary) as 'Salary', e.hire_date FROM Employees e RIGHT JOIN regional_staff r USING (Employee_ID, first_name, last_name)
@@ -57,6 +58,7 @@ else{
 <head>
 <title>EmployeeDirectory</title>
 </head>
+
 <body style="font-family: Georgia">
 
 		<style type="text/css">
@@ -99,9 +101,10 @@ else{
    					<th width="13%" align="center"  bgcolor="#E6E6E6"><strong>Salary</strong></td>     				
     				<th width="13%" align="center" bgcolor="#E6E6E6"><strong>Hire Date</strong></td>
 					</tr>
+					
 					<?php 
 					if($user_data['Position'] !== NULL){
-					    if (strcmp($user_data['Position'], "CEO") === 0 OR strcmp($user_data['Position'], "CFO") === 0 OR strcmp($AdminResult['name'], "Admin") === 0){
+					    if (strcmp($user_data['Position'], "CEO") === 0 OR strcmp($user_data['Position'], "CFO") === 0 OR strcmp($user_data['Position'], "DBTEST") === 0){
 					while($row = mysqli_fetch_array($result1))
 					{
 					    echo "<tr>";
@@ -114,7 +117,32 @@ else{
 					    
 					    echo "</tr>";
 					}
-					echo "</table>";
+					echo "</table>";?>
+					
+						<form method="POST">
+        					<label>Select an Employee to Edit</label>
+        						<select name="Employee_Select">
+            			<?php
+
+            			while ($row = mysqli_fetch_array($result1)){
+            			    ?>
+            			    
+               			<option value="<?php echo $row["Name"];
+
+                        ?>">
+                		</option>
+            			<?php
+            			}
+                        ?>
+            
+        </select>
+        <br>
+        
+        <input type="submit" value="submit" name="submit">
+    </form>
+					
+					
+					<?php
 					}
 					elseif (strcmp($user_data['Position'], "Regional Director") === 0 OR strcmp($AdminResult['name'], "Admin") === 0){
 					    while($row = mysqli_fetch_array($result2))
@@ -152,7 +180,10 @@ else{
 					?>
 				<?php }?>
     			</thead>
-    	</table><br>
+    	</table><br><br><br><br>
+    	
+				
+    <br>
     	<a href="index.php">Go Back</a><br><br>
 	</body>
 </html>
